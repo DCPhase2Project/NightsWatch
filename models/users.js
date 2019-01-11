@@ -1,14 +1,13 @@
-'use strict'
+'use strict';
 module.exports = (sequelize, DataTypes) => {
   const users = sequelize.define('users', {
-    id: DataTypes.NUMBER,
-    first_name: DataTypes.STRING,
-    last_name: DataTypes.STRING,
+    fname: DataTypes.STRING,
+    lname: DataTypes.STRING,
     email: DataTypes.STRING,
     username: DataTypes.STRING
-  }, {})
-  users.associate = function (models) {
-    // associations can be defined here
-  }
-  return users
-}
+  }, {});
+  users.associate = function(models) {
+    users.belongsToMany(models.movies, {through: 'movie_users', foreignKey: 'user_id'})
+  };
+  return users;
+};
