@@ -34,5 +34,5 @@ db.users.findAll({
 })
 .then(function(results){
     console.log(results)
-    //console.log(results[0].dataValues.movies[0].dataValues)
+    console.log(results[0].dataValues.movies[0].dataValues)
 })
