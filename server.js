@@ -20,8 +20,13 @@ app.post('/send/data', function(request, response, nextFn) {
     console.log(movieSearch)
 
     // var movieDB = sequelize.define('movieDB',)
-
 })
+
+db.movies_db.findAll()
+    .then(function(result) {
+        console.log(result)
+    })
+
 
 app.listen(3500, function() {
     console.log('server is listening on port 3500...')
