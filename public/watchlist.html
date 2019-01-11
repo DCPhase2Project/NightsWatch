@@ -12,34 +12,24 @@
 	 crossorigin="anonymous"></script>
 	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 	<script src="data.js"></script>
-	<script src="index.js"></script>
+  <script src="watchlist.js"></script>
+	<link rel="stylesheet" href="index.css" />
 </head>
-<body style="background-color: black">
+<body>
 	<div class="container">
 		<div class="row">
 			<div class="col-12 header text-center">
-				<h2 class="display-2" style="color: white;">Nightswatch</h2>
-				<p style="color: white;">Search our database for movies you want to watch.</p>
-				<p style="color: white;">Save them to <a href="watchlist.html">your watchlist</a></p>
+				<h2 class="display-2">Scene It</h2>
+				<p><a href="index.html">Search</a> for movies you want to watch.</p>
+				<p>Save them to <a href="watchlist.html">your list</a></p>
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-12 search">
-				<form id="search-form">
-					<div class="input-group input-group-lg">
-						<input class="form-control" id="search-bar" placeholder="Search for a movie...">	
-						<button class="btn btn-primary input-group-btn" type="submit">Search</button>
-				    </div>
-				</form>
-			</div>
 		</div>
-		<div class="row d-flex" id="resultsContainer" style="flex-wrap: wrap; justify-content: space-between;">
+		<div class="row d-flex" id="moviesContainer" style="flex-wrap: wrap; justify-content: space-between;">
 					
 		</div>
 
 	</div>
 </body>
 </html>
-
-
-
