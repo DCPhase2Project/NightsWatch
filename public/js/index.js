@@ -2,10 +2,10 @@ var movieHTML = []
 var moviesArray = []
 
 function listenToSearch () {
-  document.getElementById('search-form').addEventListener('submit', hitAPI)
+  document.getElementById('search-form').addEventListener('submit', hitMoviesDB)
 }
 
-function hitAPI (e) {
+function hitMoviesDB (e) {
   e.preventDefault()
   var searchString = document.getElementById('search-bar').value
   var urlEncodedSearchString = encodeURIComponent(searchString)
