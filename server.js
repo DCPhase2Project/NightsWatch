@@ -12,7 +12,7 @@ app.use(express.static(__dirname + '/public'))
 
 //Sequelize
 const Sequelize = require('sequelize')
-const sequelize = new Sequelize('database')
+// // const sequelize = new Sequelize('database')
 
 //why did a 'get' not work here???
 app.post('/send/data', function(request, response, nextFn) {
@@ -22,7 +22,7 @@ app.post('/send/data', function(request, response, nextFn) {
     // var movieDB = sequelize.define('movieDB',)
 })
 
-db.movies_db.findAll()
+db.movies_db.movies.findAll()
     .then(function(result) {
         console.log(result)
     })
