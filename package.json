@@ -1,0 +1,29 @@
+{
+  "name": "phase2project",
+  "version": "1.0.0",
+  "description": "Phase 2 Project",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "morgan": "^1.9.1",
+    "nodemon": "^1.18.9",
+    "pg": "^7.7.1",
+    "sequelize": "^4.42.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DCPhase2Project/NightsWatch.git"
+  },
+  "author": "Nick Phelps",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DCPhase2Project/NightsWatch/issues"
+  },
+  "homepage": "https://github.com/DCPhase2Project/NightsWatch#readme"
+}
