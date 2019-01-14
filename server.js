@@ -80,3 +80,41 @@ app.get('/auth/facebook/callback',
     function(req, res) {
         res.redirect('/success')
     })
+
+
+//Google Login 
+const GOOGLE_CILENT_ID = '542437951998-vomqm30fncb2jcccjc7os9at70k7nbq6.apps.googleusercontent.com'
+const GOOGLE_CILENT_SERECT = 'x61ueMbtPH1VKiDYG3Yz9wbq'
+
+// gapi.load('auth2', function() {
+//     gapi.auth2.init()
+// })
+
+// function onSignIn(googleUser) {
+//     var profile = googleUser.getBasicProfile();
+//     $(".g-signin2").css("display", "none")
+//     $(".data").css("display", "block")
+//     $("#pic").attr('src', profile.getImageUrl())
+//     $("#email").text(profile.getEmail())
+
+//     console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+//     console.log('Name: ' + profile.getName());
+//     console.log('Image URL: ' + profile.getImageUrl());
+//     console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+//   }
+
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
+
+document.getElementById('googleSignInButton').click = function() {
+passport.use(new GoogleStrategy({
+    clientID: GOOGLE_CILENT_ID,
+    clientSecret: GOOGLE_CILENT_SERECT,
+    callbackURL: 'http://localhost:3500/auth/google/callback'
+},
+function(accessToken, refreshToken, profile, done) {
+    User.findOrCreate({ googleId: profile.id}, function(err, user) {
+        return done(err, user)
+    })
+}
+))
+}//event listener
