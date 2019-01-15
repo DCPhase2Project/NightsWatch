@@ -112,12 +112,12 @@ app.get('/auth/google/callback',
       res.redirect('/');
     });
 
-// app.get('/auth/google/callback', 
-//     passport.authenticate('google', { 
-//         successRedirect: '/auth/google/success',
-//         failureRedirect: '/auth/google/failure'
-// }))
-// ,
-//     function(req, res) {
-//         res.redirect('/success')
-//     })
+
+    //logout logic
+    // app.get('/logout', function(res, req, nextFn) {
+    //     req.logout()
+    //     //redirect to homepage
+    //     res.redirect('/')
+    // })
+
+
