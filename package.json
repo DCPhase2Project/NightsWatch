@@ -4,16 +4,17 @@
   "description": "This is the final project for \"Phase 2\" of the Flex course for [DigitalCrafts] Houston. It is focused on backend technologies using [Node.js].",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
   },
   "devDependencies": {
     "standard": "12.0.1",
-    "body-parser": "^1.18.3",
-    "express": "^4.16.4",
-    "morgan": "^1.9.1",
-    "nodemon": "^1.18.9",
-    "pg": "^7.7.1",
-    "sequelize": "^4.42.0"
+    "body-parser": "1.18.3",
+    "express": "4.16.4",
+    "morgan": "1.9.1",
+    "nodemon": "1.18.9",
+    "pg": "7.7.1",
+    "sequelize": "4.42.0"
   },
   "repository": {
     "type": "git",
@@ -26,9 +27,12 @@
   },
   "homepage": "https://github.com/DCPhase2Project/NightsWatch#readme",
   "dependencies": {
-    "express": "^4.16.4",
-    "pg": "^7.7.1",
-    "pg-hstore": "^2.3.2",
-    "sequelize": "^4.42.0"
+    "passport": "0.4.0",
+    "passport-facebook": "2.1.1",
+    "passport-google-oauth": "1.0.0",
+    "passport-google-oauth2": "0.1.6",
+    "pg": "7.7.1",
+    "pg-hstore": "2.3.2",
+    "sequelize": "4.42.0"
   }
 }
