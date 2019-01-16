@@ -26,6 +26,10 @@
   },
   "homepage": "https://github.com/DCPhase2Project/NightsWatch#readme",
   "dependencies": {
+    "passport": "^0.4.0",
+    "passport-facebook": "^2.1.1",
+    "passport-google-oauth": "^1.0.0",
+    "passport-google-oauth2": "^0.1.6",
     "pg": "^7.7.1",
     "pg-hstore": "^2.3.2",
     "sequelize": "^4.42.0"
