@@ -6,6 +6,6 @@ module.exports = (sequelize, DataTypes) => {
   }, {})
   movie_users.associate = function (models) {
 
-  }
-  return movie_users
+  };
+  return movie_users;
 };
