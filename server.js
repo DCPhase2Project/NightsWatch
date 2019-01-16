@@ -12,8 +12,6 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(__dirname + '/public'))
 
-
-
 //why did a 'get' not work here???
 app.post('/send/data', function(request, response, nextFn) {
     let movieSearch = request.body.searchData
@@ -34,15 +32,7 @@ app.post('/send/data', function(request, response, nextFn) {
             response.send(data)
   
         }) 
-
-    
 })
-
-
-// db.movies_db.movies.findAll()
-//     .then(function(result) {
-//         console.log(result)
-//     })
 
 //express set up from article
 app.get('/', function (req, res) {
