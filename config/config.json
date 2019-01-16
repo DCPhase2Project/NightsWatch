@@ -1,8 +1,8 @@
 {
   "development": {
-    "username": "catherinehimberger",
+    "username": "sarahnash",
     "password": null,
-    "database": "movies_db",
+    "database": "nightswatch_movies",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
