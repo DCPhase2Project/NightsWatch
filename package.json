@@ -1,0 +1,33 @@
+{
+  "name": "nightswatch",
+  "version": "1.0.0",
+  "description": "This is the final project for \"Phase 2\" of the Flex course for [DigitalCrafts] Houston. It is focused on backend technologies using [Node.js].",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "standard": "12.0.1",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "morgan": "^1.9.1",
+    "nodemon": "^1.18.9",
+    "pg": "^7.7.1",
+    "sequelize": "^4.42.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DCPhase2Project/NightsWatch.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DCPhase2Project/NightsWatch/issues"
+  },
+  "homepage": "https://github.com/DCPhase2Project/NightsWatch#readme",
+  "dependencies": {
+    "pg": "^7.7.1",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.42.0"
+  }
+}
