@@ -28,13 +28,14 @@ app.post('/send/data', function(request, response, nextFn) {
         }
       })
         .then(function (results) {
-          results.forEach(function (result) {
-            console.log(result.dataValues.title)
-            console.log(result.dataValues.genre)
-          })
+            const data = results.map(function (result) {
+                return result.dataValues
+            })
+            response.send(data)
+  
         }) 
 
-    response.send()
+    
 })
 
 
