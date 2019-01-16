@@ -15,14 +15,3 @@ document.getElementById('submit-button').addEventListener('click', function () {
         console.log(error)
     })
 })
-
-//logging out logic
-// document.getElementById('logOutButton').addEventListener('click', function() {
-//     $.ajax({
-//         type: "POST",
-//         url: '/logout',
-//         // data: {
-//         //     myData: true
-//         // }
-//     })
-// })
