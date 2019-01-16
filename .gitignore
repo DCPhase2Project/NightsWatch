@@ -6,3 +6,6 @@ public/js/app.js
 
 # ignore .diff files
 *.diff
+
+# ignore config.json file
+config/config.json
