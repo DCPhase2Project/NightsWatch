@@ -11,33 +11,29 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(__dirname + '/public'))
 
-// why did a 'get' not work here???
-app.post('/send/data', function (request, response, nextFn) {
-  let movieSearch = request.body.searchData
-  console.log(movieSearch)
+//why did a 'get' not work here???
+app.post('/send/data', function(request, response, nextFn) {
+    let movieSearch = request.body.searchData
+    console.log(movieSearch)
 
-  // queries
-  db.movies.findAll({
-    where: {
-      title: {
-        [Op.like]: '%' + movieSearch + '%'
-      }
-    }
-  })
-    .then(function (results) {
-      results.forEach(function (result) {
-        console.log(result.dataValues.title)
-        console.log(result.dataValues.genre)
+    //queries
+    db.movies.findAll({
+        where: {
+          title: {
+            [Op.like]: '%' + movieSearch + '%'
+          }
+        }
       })
-    })
+        .then(function (results) {
+            const data = results.map(function (result) {
+                return result.dataValues
+            })
+            response.send(data)
+  
+        }) 
 })
 
-// db.movies_db.movies.findAll()
-//     .then(function(result) {
-//         console.log(result)
-//     })
-
-// express set up from article
+//express set up from article
 app.get('/', function (req, res) {
   res.sendFile('index.html', {
     root: __dirname + '/public'
