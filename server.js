@@ -3,6 +3,10 @@ var bodyParser = require('body-parser')
 
 var app = express()
 var db = require('./models/db')
+const Sequelize = require('sequelize')
+const queries = {}
+const Op = Sequelize.Op
+
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -14,7 +18,23 @@ app.use(express.static(__dirname + '/public'))
 app.post('/send/data', function(request, response, nextFn) {
     let movieSearch = request.body.searchData
     console.log(movieSearch)
-    response.send(movieSearch)
+
+    //queries
+    db.movies.findAll({
+        where: {
+          title: {
+            [Op.like]: '%' + movieSearch + '%'
+          }
+        }
+      })
+        .then(function (results) {
+          results.forEach(function (result) {
+            console.log(result.dataValues.title)
+            console.log(result.dataValues.genre)
+          })
+        }) 
+
+    response.send()
 })
 
 

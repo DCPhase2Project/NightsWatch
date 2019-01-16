@@ -1,4 +1,4 @@
-document.getElementById('submit-button').addEventListener('submit', function () {
+document.getElementById('submit-button').addEventListener('click', function () {
     const userSearch = document.getElementById('search-bar').value
 
   $.ajax({

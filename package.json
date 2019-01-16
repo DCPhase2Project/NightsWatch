@@ -4,7 +4,8 @@
   "description": "This is the final project for \"Phase 2\" of the Flex course for [DigitalCrafts] Houston. It is focused on backend technologies using [Node.js].",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
   },
   "devDependencies": {
     "standard": "12.0.1",
