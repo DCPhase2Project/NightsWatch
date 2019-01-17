@@ -29,18 +29,18 @@ db.movies.findAll({
     })
   })
 
-//   db.movies.findAll({
-//     where: {
-//       title: 1
-//     },
-//     include: [{
-//       model: db.users,
-//       through: db.movie_users
-//     }]
-//   })
-//     .then(function (results) {
-//       console.log(results)
-//     })
+  db.movies.findAll({
+    where: {
+      title: 1
+    },
+    include: [{
+      model: db.users,
+      through: db.movie_users
+    }]
+  })
+    .then(function (results) {
+      console.log(results)
+    })
 
 // db.users.findAll({
 //     where: {
