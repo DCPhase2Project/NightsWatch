@@ -1,3 +1,5 @@
+const $ = window.jQuery
+
 function renderMovies (myWatchlist) {
   var movieHTML = myWatchlist.map(makeMovie).join('')
   $(movieHTML).appendTo('#moviesContainer')

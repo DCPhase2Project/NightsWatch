@@ -1,109 +1,103 @@
 var express = require('express')
 var bodyParser = require('body-parser')
-
 var app = express()
 var db = require('./models/db')
 const Sequelize = require('sequelize')
-const queries = {}
 const Op = Sequelize.Op
-//db.movie_users.hasMany(db.movies, {foreignKey: 'id'})
-//db.movie_users.belongsTo(db.movies, {foreignKey: 'movie_id'})
-
+// db.movie_users.hasMany(db.movies, {foreignKey: 'id'})
+// db.movie_users.belongsTo(db.movies, {foreignKey: 'movie_id'})
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(__dirname + '/public'))
 
-app.post('/send/data', function(req, res, nextFn) {
-    let movieSearch = req.body.searchData
+app.post('/send/data', function (req, res, nextFn) {
+  let movieSearch = req.body.searchData
 
-    console.log(movieSearch)
+  console.log(movieSearch)
 
-    //queries
-    db.movies.findAll({
-        where: {
-          title: {
-            [Op.like]: '%' + movieSearch + '%'
-          }
-        }
+  // queries
+  db.movies.findAll({
+    where: {
+      title: {
+        [Op.like]: '%' + movieSearch + '%'
+      }
+    }
+  })
+    .then(function (results) {
+      const data = results.map(function (result) {
+        return result.dataValues
       })
-        .then(function (results) {
-            const data = results.map(function (result) {
-                return result.dataValues
-            })
-            res.send(data)
-  
-        }) 
-})//post function
+      res.send(data)
+    })
+})// post function
 
-//adds data to join table 
-app.post('/saveto/watchlist', function(request, respone, nextFn) {
+// adds data to join table
+app.post('/saveto/watchlist', function (request, respone, nextFn) {
   let movieSearch = request.body.searchData
   console.log(movieSearch)
 
   const movieID = 5
   const userID = 2
 
-  //users presses add button on html card and it renders to users database
+  // users presses add button on html card and it renders to users database
   db.movie_users.create({
-      user_id: userID,
-      movie_id: movieID
+    user_id: userID,
+    movie_id: movieID
   })
     .then(function (result) {
       console.log(result)
     })
-    .catch (function (error) {
+    .catch(function (error) {
       console.log(error)
     })
 })
 
-// Rendering Watchlist 
+// Rendering Watchlist
 
-app.get ('/watchlist', function (req, res, nextFn) {
+app.get('/watchlist', function (req, res, nextFn) {
   // Placeholder for Session ID
-  db.users.find ({
+  db.users.find({
     where: {
       id: 23
-    }
-  , include: [db.movies]
-})
-  .then (function (data) {
-    console.log (data)
-   const watchlistHTML = data.movies.map(function (movieData){
-    console.log (movieData.title)
-    console.log (movieData)
-
-      return `<li><h3>${movieData.title}</h3></li>` 
-       
-    })
-    console.log(watchlistHTML)
-    console.log(typeof watchlistHTML)
-    res.send(watchlistHTML.join(''))
+    },
+    include: [db.movies]
   })
-   
+    .then(function (data) {
+      console.log(data)
+      const watchlistHTML = data.movies.map(function (movieData) {
+        console.log(movieData.title)
+        console.log(movieData)
+
+        return `<li><h3>${movieData.title}</h3></li>`
+      })
+      console.log(watchlistHTML)
+      console.log(typeof watchlistHTML)
+      res.send(watchlistHTML.join(''))
+    })
 })
 
-//adds data to join table
+// adds data to join table
 app.post('/watchlist/:movieID', function (request, response, nextFn) {
   const userID = 19
 
-  //TODO: Take userID from html object
+  // TODO: Take userID from html object
   db.movie_users.findOrCreate({
     where: {
       movie_id: request.params.movieID,
       user_id: userID
-    }     
+    }
   })
-  .then(function (result) {
-    response.send(result)
-  })
-  .catch(function (error) {
-    response.send(error)
-  })
+    .then(function (result) {
+      response.send(result)
+    })
+    .catch(function (error) {
+      response.send(error)
+    })
 })
 
-////////////////////////// oAuth ///////////////////////////
-//express set up from article
+/// /////////////////////// oAuth ///////////////////////////
+// express set up from article
 app.get('/', function (req, res) {
   res.sendFile('index.html', {
     root: __dirname + '/public'
@@ -150,25 +144,24 @@ function (accessToken, refreshToken, profile, cb) {
   console.log(profile)
   console.log('---------------')
 
-  let nameArray = profile.displayName.split(" ")
+  let nameArray = profile.displayName.split(' ')
   let fname = nameArray[0]
   let lname = nameArray[1]
 
   db.users.findOrCreate({
     where: {
       fname: fname,
-      lname: lname,  
-      email: "Null",
-      username: "Null"
-    }     
+      lname: lname,
+      email: 'Null',
+      username: 'Null'
+    }
   })
-  .then(function (result) {
-    console.log(result)
-  })
-  .catch(function (error) {
-    console.log(error)
-  })
-  
+    .then(function (result) {
+      console.log(result)
+    })
+    .catch(function (error) {
+      console.log(error)
+    })
 
   return cb(null, profile)
 }
@@ -200,27 +193,27 @@ function (request, accessToken, refreshToken, profile, done) {
   console.log('return value from Google:', profile)
   console.log('--------------------------')
 
-  let nameArray = profile.displayName.split(" ")
+  let nameArray = profile.displayName.split(' ')
   let firstName = nameArray[0]
   let lastName = nameArray[1]
 
-  db.users.findOrCreate({ 
+  db.users.findOrCreate({
     where: {
       fname: firstName,
       lname: lastName,
-      email: "Null",
-      username: "Null",
-      googleId: profile.id 
+      email: 'Null',
+      username: 'Null',
+      googleId: profile.id
     }
     // return done(err, user)
   })
-  .then(function (result) {
+    .then(function (result) {
     // console.log(result)
-    return done(null, result)
-  })
-  .catch(function (error) {
-    console.log(error)
-  })
+      return done(null, result)
+    })
+    .catch(function (error) {
+      console.log(error)
+    })
 }
 ))
 
