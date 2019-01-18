@@ -6,14 +6,17 @@ var db = require('./models/db')
 const Sequelize = require('sequelize')
 const queries = {}
 const Op = Sequelize.Op
+//db.movie_users.hasMany(db.movies, {foreignKey: 'id'})
+//db.movie_users.belongsTo(db.movies, {foreignKey: 'movie_id'})
+
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(__dirname + '/public'))
 
 //why did a 'get' not work here???
-app.post('/send/data', function(request, response, nextFn) {
-    let movieSearch = request.body.searchData
+app.post('/send/data', function(req, res, nextFn) {
+    let movieSearch = req.body.searchData
     console.log(movieSearch)
 
     //queries
@@ -31,6 +34,35 @@ app.post('/send/data', function(request, response, nextFn) {
             response.send(data)
   
         }) 
+})
+
+// Rendering Watchlist 
+
+app.get ('/watchlist', function (req, res, nextFn) {
+  
+  // Placeholder for Session ID
+  db.users.find ({
+    where: {
+      id: 23
+    }
+    
+  , include: [db.movies]
+})
+  .then (function (data) {
+    console.log (data)
+   const watchlistHTML = data.movies.map(function (movieData){
+    console.log (movieData.title)
+    console.log (movieData)
+    // return movieData.title
+
+      return `<li><h3>${movieData.title}</h3></li>` 
+       
+    })
+    console.log(watchlistHTML)
+    console.log(typeof watchlistHTML)
+    res.send(watchlistHTML.join(''))
+  })
+   
 })
 
 //express set up from article
