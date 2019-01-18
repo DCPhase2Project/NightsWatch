@@ -18,7 +18,6 @@ document.getElementById('submit-button').addEventListener('click', function () {
 
 document.getElementById('add-button').addEventListener('click', function () {
     const userSearch = document.getElementById('search-bar').value
-    // const userSearchUPPER = 
 
   $.ajax({
       type: "POST",
@@ -34,3 +33,4 @@ document.getElementById('add-button').addEventListener('click', function () {
       console.log(error)
   })
 })
+
