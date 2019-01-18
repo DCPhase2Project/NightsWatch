@@ -11,7 +11,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(__dirname + '/public'))
 
-//why did a 'get' not work here???
+//searches data on database
 app.post('/send/data', function(request, response, nextFn) {
     let movieSearch = request.body.searchData
     console.log(movieSearch)
@@ -35,6 +35,7 @@ app.post('/send/data', function(request, response, nextFn) {
     
 })//post function
 
+//adds data to join table 
 app.post('/saveto/watchlist', function(request, respone, nextFn) {
   let movieSearch = request.body.searchData
   console.log(movieSearch)
@@ -58,14 +59,16 @@ app.post('/saveto/watchlist', function(request, respone, nextFn) {
     })
 })
 
+//adds data to join table
 app.post('/watchlist/:movieID', function (request, response, nextFn) {
-  const userID = 7
+  const userID = 19
 
-  //
-
-  db.movie_users.create({
-    user_id: userID,
-    movie_id: request.params.movieID
+  //TODO: Take userID from html object
+  db.movie_users.findOrCreate({
+    where: {
+      movie_id: request.params.movieID,
+      user_id: userID
+    }     
   })
   .then(function (result) {
     response.send(result)
