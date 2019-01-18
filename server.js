@@ -31,7 +31,7 @@ app.post('/send/data', function(req, res, nextFn) {
             const data = results.map(function (result) {
                 return result.dataValues
             })
-            response.send(data)
+            res.send(data)
   
         }) 
 })//post function
@@ -60,13 +60,11 @@ app.post('/saveto/watchlist', function(request, respone, nextFn) {
 // Rendering Watchlist 
 
 app.get ('/watchlist', function (req, res, nextFn) {
-  
   // Placeholder for Session ID
   db.users.find ({
     where: {
       id: 23
     }
-    
   , include: [db.movies]
 })
   .then (function (data) {
@@ -74,7 +72,6 @@ app.get ('/watchlist', function (req, res, nextFn) {
    const watchlistHTML = data.movies.map(function (movieData){
     console.log (movieData.title)
     console.log (movieData)
-    // return movieData.title
 
       return `<li><h3>${movieData.title}</h3></li>` 
        
@@ -202,9 +199,17 @@ function (request, accessToken, refreshToken, profile, done) {
   console.log(request.body)
   console.log('return value from Google:', profile)
   console.log('--------------------------')
+
+  let nameArray = profile.displayName.split(" ")
+  let firstName = nameArray[0]
+  let lastName = nameArray[1]
+
   db.users.findOrCreate({ 
     where: {
-      
+      fname: firstName,
+      lname: lastName,
+      email: "Null",
+      username: "Null",
       googleId: profile.id 
     }
     // return done(err, user)
