@@ -31,8 +31,51 @@ app.post('/send/data', function(request, response, nextFn) {
             response.send(data)
   
         }) 
+
+    
+})//post function
+
+app.post('/saveto/watchlist', function(request, respone, nextFn) {
+  let movieSearch = request.body.searchData
+  console.log(movieSearch)
+  //how do we get the user's id?
+
+  //how do we get the movie id?
+
+  const movieID = 5
+  const userID = 2
+
+  //users presses add button on html card and it renders to users database
+  db.movie_users.create({
+      user_id: userID,
+      movie_id: movieID
+  })
+    .then(function (result) {
+      console.log(result)
+    })
+    .catch (function (error) {
+      console.log(error)
+    })
 })
 
+app.post('/watchlist/:movieID', function (request, response, nextFn) {
+  const userID = 7
+
+  //
+
+  db.movie_users.create({
+    user_id: userID,
+    movie_id: request.params.movieID
+  })
+  .then(function (result) {
+    response.send(result)
+  })
+  .catch(function (error) {
+    response.send(error)
+  })
+})
+
+////////////////////////// oAuth ///////////////////////////
 //express set up from article
 app.get('/', function (req, res) {
   res.sendFile('index.html', {
