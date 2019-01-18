@@ -25,16 +25,17 @@
 						<button type="button" class="btn btn-primary">Primary</button> -->
 						<a href=auth/facebook>Sign in with Facebook</a>
 						<br></br>
-						<div id="googleSignInButton" class="g-signin2" data-onsuccess="onSignIn"></div>
+						<!-- <div id="googleSignInButton" class="g-signin2" data-onsuccess="onSignIn"></div> -->
+						<a href=auth/google>Sign in with Google</a>
 						<br></br>
 						<button id="logOutButton" type="button" class="btn btn-primary">Log Out</button>
 					</div>
 				  </nav>
 		<div class="row">
 			<div class="col-12 header text-center">
-				<h2 class="display-2" style="color: white;">Nightswatch</h2>
-				<p style="color: white;">Search our database for movies you want to watch.</p>
-				<p style="color: white;">Save them to <a href="watchlist.html">your watchlist</a></p>
+				<h2 class="display-2">Nightswatch</h2>
+				<p>Search our database for movies you want to watch.</p>
+				<p>Save them to <a href="watchlist.html">your watchlist</a></p>
 			</div>
 		</div>
 		<div class="row">
@@ -43,10 +44,16 @@
 					<div class="input-group input-group-lg">
 						<input class="form-control" id="search-bar" placeholder="Search for a movie...">	
 						<button id="submit-button" class="btn btn-primary input-group-btn" type="button">Search</button>
+					</br>
+						<button id="add-button" class="btn btn-primary input-group-btn" type="button">Add Movie to WatchList</button>
 				    </div>
 				</form>
 			</div>
 		</div>
+
+		<!-- Add Movies to User WatchList -->
+
+
 		<div class="row d-flex" id="resultsContainer" style="flex-wrap: wrap; justify-content: space-between;">
 					
 		</div>
