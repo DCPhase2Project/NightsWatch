@@ -31,17 +31,12 @@ app.post('/send/data', function(request, response, nextFn) {
             response.send(data)
   
         }) 
-
-    
 })//post function
 
 //adds data to join table 
 app.post('/saveto/watchlist', function(request, respone, nextFn) {
   let movieSearch = request.body.searchData
   console.log(movieSearch)
-  //how do we get the user's id?
-
-  //how do we get the movie id?
 
   const movieID = 5
   const userID = 2
@@ -123,6 +118,29 @@ passport.use(new FacebookStrategy({
   callbackURL: '/auth/facebook/callback'
 },
 function (accessToken, refreshToken, profile, cb) {
+  console.log(profile)
+  console.log('---------------')
+
+  let nameArray = profile.displayName.split(" ")
+  let fname = nameArray[0]
+  let lname = nameArray[1]
+
+  db.users.findOrCreate({
+    where: {
+      fname: fname,
+      lname: lname,  
+      email: "Null",
+      username: "Null"
+    }     
+  })
+  .then(function (result) {
+    console.log(result)
+  })
+  .catch(function (error) {
+    console.log(error)
+  })
+  
+
   return cb(null, profile)
 }
 ))
@@ -149,8 +167,22 @@ passport.use(new GoogleStrategy({
   passReqToCallback: true
 },
 function (request, accessToken, refreshToken, profile, done) {
-  User.findOrCreate({ googleId: profile.id }, function (err, user) {
-    return done(err, user)
+  console.log(request.body)
+  console.log('return value from Google:', profile)
+  console.log('--------------------------')
+  db.users.findOrCreate({ 
+    where: {
+      
+      googleId: profile.id 
+    }
+    // return done(err, user)
+  })
+  .then(function (result) {
+    // console.log(result)
+    return done(null, result)
+  })
+  .catch(function (error) {
+    console.log(error)
   })
 }
 ))

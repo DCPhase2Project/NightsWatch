@@ -1,6 +1,5 @@
 document.getElementById('submit-button').addEventListener('click', function () {
     const userSearch = document.getElementById('search-bar').value
-    // const userSearchUPPER = 
 
   $.ajax({
       type: "POST",
