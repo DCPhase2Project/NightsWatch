@@ -14,9 +14,9 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(__dirname + '/public'))
 
-//why did a 'get' not work here???
 app.post('/send/data', function(req, res, nextFn) {
     let movieSearch = req.body.searchData
+
     console.log(movieSearch)
 
     //queries
@@ -34,6 +34,27 @@ app.post('/send/data', function(req, res, nextFn) {
             response.send(data)
   
         }) 
+})//post function
+
+//adds data to join table 
+app.post('/saveto/watchlist', function(request, respone, nextFn) {
+  let movieSearch = request.body.searchData
+  console.log(movieSearch)
+
+  const movieID = 5
+  const userID = 2
+
+  //users presses add button on html card and it renders to users database
+  db.movie_users.create({
+      user_id: userID,
+      movie_id: movieID
+  })
+    .then(function (result) {
+      console.log(result)
+    })
+    .catch (function (error) {
+      console.log(error)
+    })
 })
 
 // Rendering Watchlist 
@@ -65,6 +86,26 @@ app.get ('/watchlist', function (req, res, nextFn) {
    
 })
 
+//adds data to join table
+app.post('/watchlist/:movieID', function (request, response, nextFn) {
+  const userID = 19
+
+  //TODO: Take userID from html object
+  db.movie_users.findOrCreate({
+    where: {
+      movie_id: request.params.movieID,
+      user_id: userID
+    }     
+  })
+  .then(function (result) {
+    response.send(result)
+  })
+  .catch(function (error) {
+    response.send(error)
+  })
+})
+
+////////////////////////// oAuth ///////////////////////////
 //express set up from article
 app.get('/', function (req, res) {
   res.sendFile('index.html', {
@@ -109,6 +150,29 @@ passport.use(new FacebookStrategy({
   callbackURL: '/auth/facebook/callback'
 },
 function (accessToken, refreshToken, profile, cb) {
+  console.log(profile)
+  console.log('---------------')
+
+  let nameArray = profile.displayName.split(" ")
+  let fname = nameArray[0]
+  let lname = nameArray[1]
+
+  db.users.findOrCreate({
+    where: {
+      fname: fname,
+      lname: lname,  
+      email: "Null",
+      username: "Null"
+    }     
+  })
+  .then(function (result) {
+    console.log(result)
+  })
+  .catch(function (error) {
+    console.log(error)
+  })
+  
+
   return cb(null, profile)
 }
 ))
@@ -135,8 +199,22 @@ passport.use(new GoogleStrategy({
   passReqToCallback: true
 },
 function (request, accessToken, refreshToken, profile, done) {
-  User.findOrCreate({ googleId: profile.id }, function (err, user) {
-    return done(err, user)
+  console.log(request.body)
+  console.log('return value from Google:', profile)
+  console.log('--------------------------')
+  db.users.findOrCreate({ 
+    where: {
+      
+      googleId: profile.id 
+    }
+    // return done(err, user)
+  })
+  .then(function (result) {
+    // console.log(result)
+    return done(null, result)
+  })
+  .catch(function (error) {
+    console.log(error)
   })
 }
 ))
