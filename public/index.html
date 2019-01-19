@@ -8,7 +8,8 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+		<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 	<!-- GOOGLE SIGN IN CILENT ID??-->
 	<meta name="google-signin-client_id" content="535967090840-dvh8ns1q1avbnbs8mkafhn1bfrup17n2.apps.googleusercontent.com">
     <title>Phase 2 Project</title>
@@ -44,16 +45,11 @@
 					<div class="input-group input-group-lg">
 						<input class="form-control" id="search-bar" placeholder="Search for a movie...(case sensitive)">	
 						<button id="submit-button" class="btn btn-primary input-group-btn" type="button">Search</button>
-					</br>
-						<button id="add-button" class="btn btn-primary input-group-btn" type="button">Add Movie to WatchList</button>
-				    </div>
 				</form>
 			</div>
 		</div>
 
-		<!-- Add Movies to User WatchList -->
-
-
+		<!-- Render movies from user's search -->
 		<div class="row d-flex" id="resultsContainer" style="flex-wrap: wrap; justify-content: space-between;">
 					
 		</div>
