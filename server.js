@@ -4,8 +4,6 @@ var app = express()
 var db = require('./models/db')
 const Sequelize = require('sequelize')
 const Op = Sequelize.Op
-// db.movie_users.hasMany(db.movies, {foreignKey: 'id'})
-// db.movie_users.belongsTo(db.movies, {foreignKey: 'movie_id'})
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -33,20 +31,16 @@ app.post('/send/data', function (req, res, nextFn) {
 })// post function
 
 // adds data to join table
-app.post('/saveto/watchlist', function (request, respone, nextFn) {
-  let movieSearch = request.body.searchData
-  console.log(movieSearch)
-
-  const movieID = 5
+app.post('/saveto/watchlist', function (req, res, nextFn) {
   const userID = 2
 
   // users presses add button on html card and it renders to users database
   db.movie_users.create({
     user_id: userID,
-    movie_id: movieID
+    movie_id: req.body.searchData
   })
     .then(function (result) {
-      console.log(result)
+      res.send('saved to your list!')
     })
     .catch(function (error) {
       console.log(error)
@@ -55,44 +49,45 @@ app.post('/saveto/watchlist', function (request, respone, nextFn) {
 
 // Rendering Watchlist
 
-app.get('/watchlist', function (req, res, nextFn) {
+app.post('/watchlist', function (req, res, nextFn) {
   // Placeholder for Session ID
-  db.users.find({
+  db.users.findAll({
     where: {
-      id: 23
+      id: req.body.searchData
     },
-    include: [db.movies]
+    include: [{
+      model: db.movies,
+      through: {
+        attributes: [db.movies.id]
+      }
+    }]
   })
-    .then(function (data) {
-      console.log(data)
-      const watchlistHTML = data.movies.map(function (movieData) {
-        console.log(movieData.title)
-        console.log(movieData)
-
-        return `<li><h3>${movieData.title}</h3></li>`
+    .then(function (results) {
+      const data = results.map(function (result) {
+        return result.dataValues
       })
-      console.log(watchlistHTML)
-      console.log(typeof watchlistHTML)
-      res.send(watchlistHTML.join(''))
+      res.send(data)
+    })
+    .catch(function (error) {
+      console.log(error)
     })
 })
 
-// adds data to join table
-app.post('/watchlist/:movieID', function (request, response, nextFn) {
-  const userID = 19
+// remove data from join table
+app.delete('/removefrom/watchlist', function (req, res, nextFn) {
 
-  // TODO: Take userID from html object
-  db.movie_users.findOrCreate({
+  // users presses add button on html card and it renders to users database
+  db.movie_users.destroy({
     where: {
-      movie_id: request.params.movieID,
-      user_id: userID
+      movie_id: req.body.movieId,
+      user_id: req.body.userId
     }
   })
     .then(function (result) {
-      response.send(result)
+      res.send('removed from your list!')
     })
     .catch(function (error) {
-      response.send(error)
+      console.log(error)
     })
 })
 
