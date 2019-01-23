@@ -205,15 +205,26 @@ app.get('/auth/google/callback',
   app.get('/user', function(req, res, nextFn) {
     if (req.user) {
       res.json({
-        user: req.user
+        user: req.user,
       })
     } else {
-      res.redirect('/auth/google')
+      res.redirect('/')
     }
   }) 
 
-  // write app.get('/get/user')
-  // check for req.user
-  // if it's there res.json({user: req.user});
 
+app.get('/logout', function(req, res, nextFn) {
+  req.logOut()
+  res.redirect('/')
+})
+
+// app.get('/checkLogIn', function(req, res, nextFn) {
+//   //checking if user is logged in
+//   if (req.user) {
+//     //user is logged in
+//     return true
+//   } else {
+//     return false
+//   }
+// })
 
