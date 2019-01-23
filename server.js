@@ -5,14 +5,26 @@ var db = require('./models/db')
 const Sequelize = require('sequelize')
 const Op = Sequelize.Op
 
+//Sessions 
+var session = require('express-session')
+var cookieParser = require('cookie-parser')
+app.use(cookieParser())
+
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(__dirname + '/public'))
 
+//Session Middleware
+app.use(session({
+  secret: 'keyboard cat'
+}))
+
+
 app.post('/send/data', function (req, res, nextFn) {
   let movieSearch = req.body.searchData
 
-  console.log(movieSearch)
+  // console.log(movieSearch)
 
   // queries
   db.movies.findAll({
@@ -32,6 +44,7 @@ app.post('/send/data', function (req, res, nextFn) {
 
 // adds data to join table
 app.post('/saveto/watchlist', function (req, res, nextFn) {
+  //TODO: get userID coded here
   const userID = 2
 
   // users presses add button on html card and it renders to users database
@@ -94,10 +107,25 @@ app.delete('/removefrom/watchlist', function (req, res, nextFn) {
 /// /////////////////////// oAuth ///////////////////////////
 // express set up from article
 app.get('/', function (req, res) {
+  console.log(req.session.token, 'MY TOKEN')
+
   res.sendFile('index.html', {
     root: __dirname + '/public'
   })
+//   if (req.session.token) {
+//     console.log(req.session.token)
+//     res.cookie('token', req.session.token);
+//     res.json({
+//         status: 'session cookie set'
+//     });
+// } else {
+//     res.cookie('token', '')
+//     res.json({
+//         status: 'session cookie not set'
+//     });
+// }
 })
+
 
 app.listen(3500, function () {
   console.log('server is listening on port 3500...')
@@ -184,13 +212,16 @@ passport.use(new GoogleStrategy({
   passReqToCallback: true
 },
 function (request, accessToken, refreshToken, profile, done) {
-  console.log(request.body)
-  console.log('return value from Google:', profile)
-  console.log('--------------------------')
+  // console.log(request.body)
+  // console.log('return value from Google:', profile)
+  // console.log('--------------------------')
 
   let nameArray = profile.displayName.split(' ')
   let firstName = nameArray[0]
   let lastName = nameArray[1]
+
+  request.session.fname = firstName
+  request.session.lname = lastName
 
   db.users.findOrCreate({
     where: {
@@ -200,10 +231,10 @@ function (request, accessToken, refreshToken, profile, done) {
       username: 'Null',
       googleId: profile.id
     }
-    // return done(err, user)
   })
     .then(function (result) {
-    // console.log(result)
+    console.log('THIS IS MY RESULT... ',result)
+
       return done(null, result)
     })
     .catch(function (error) {
@@ -220,12 +251,39 @@ app.get('/auth/google',
 app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   function (req, res) {
+    //accessing session data
+    // res.send(req.session.fname + ' ' + req.session.lname)
+    // req.session.token = req.user.token
+    console.log(req.session.token)
     res.redirect('/')
   })
 
-// logout logic
-// app.get('/logout', function(res, req, nextFn) {
-//     req.logout()
-//     //redirect to homepage
-//     res.redirect('/')
-// })
+
+  // app.post('send/userData', function(res, req, nextFn){
+  //   res.send(req.session.fname + ' ' + req.session.lname)
+  // })
+
+  
+  // app.post('/watchlist', function (req, res, nextFn) {
+  //   // Placeholder for Session ID
+  //   db.users.findAll({
+  //     where: {
+  //       id: req.body.searchData
+  //     },
+  //     include: [{
+  //       model: db.movies,
+  //       through: {
+  //         attributes: [db.movies.id]
+  //       }
+  //     }]
+  //   })
+  //     .then(function (results) {
+  //       const data = results.map(function (result) {
+  //         return result.dataValues
+  //       })
+  //       res.send(data)
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error)
+  //     })
+  // })

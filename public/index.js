@@ -11,7 +11,7 @@ function getMovieFromDB () {
     type: 'POST',
     url: '/send/data',
     data: {
-      searchData: userSearch
+      searchData: userSearch.toLowerCase().indexOf(userSearch.toLowerCase())>=0
     }
   })
     .then(function (result) {
@@ -19,6 +19,8 @@ function getMovieFromDB () {
       movieHTML = result.map(makeMovie).join('')
       if (document.getElementById('resultsContainer').innerHTML === null) {
         $(movieHTML).appendTo('#resultsContainer')
+        //setting username information
+        // $('#userName').html()
       } else {
         document.getElementById('resultsContainer').innerHTML = null
         $(movieHTML).appendTo('#resultsContainer')
@@ -56,6 +58,25 @@ function saveToWatchlist (id) {
       console.log(error)
     })
 }
+
+
+// $.ajax({
+//     type: 'POST',
+//     url: '/',
+//     data: {
+//       userData: userName 
+//     }
+//   })// ajax
+//     .then(function (result) {
+//       console.log(result)
+//     })
+//     .catch(function (error) {
+//       console.log(error)
+//     })
+    
+
+  
+
 
 function init () {
   console.log('the search bar is case sensitive')
