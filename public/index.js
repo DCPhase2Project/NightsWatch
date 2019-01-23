@@ -16,9 +16,12 @@ function getMovieFromDB () {
   })
     .then(function (result) {
       console.log(result)
+    //   console.log(result.map(makeMovie).join(''))
       movieHTML = result.map(makeMovie).join('')
       if (document.getElementById('resultsContainer').innerHTML === null) {
         $(movieHTML).appendTo('#resultsContainer')
+        //setting username information
+        // $('#userName').html()
       } else {
         document.getElementById('resultsContainer').innerHTML = null
         $(movieHTML).appendTo('#resultsContainer')
@@ -54,6 +57,29 @@ function saveToWatchlist (id) {
     })
     .catch(function (error) {
       console.log(error)
+    })
+}
+
+
+// On page load, call '/get/user'
+window.onload = function() {
+    $.ajax({
+        type: 'GET',
+        url: '/user',
+    })
+    .then(function (result) {
+        let userName = result.user[0].fname + ' ' + result.user[0].lname
+        console.log(userName)
+        // userNameHTML = result.map(userName).join('')
+        if (document.getElementById('userName').innerHTML === '') {
+            document.getElementById('userName').innerHTML = `Hello ${userName}!`
+        } else {
+            document.getElementById('userName').innerHTML = null 
+            document.getElementById('userName').innerHTML = 'Please Log In'
+        }
+    })
+    .catch(function (error) {
+        console.log(error)
     })
 }
 

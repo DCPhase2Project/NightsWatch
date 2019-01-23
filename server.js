@@ -5,14 +5,24 @@ var db = require('./models/db')
 const Sequelize = require('sequelize')
 const Op = Sequelize.Op
 
+//Sessions 
+var session = require('express-session')
+var cookieParser = require('cookie-parser')
+app.use(cookieParser())
+
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(__dirname + '/public'))
 
+//Session Middleware
+app.use(session({
+  secret: 'keyboard cat'
+}))
+
+
 app.post('/send/data', function (req, res, nextFn) {
   let movieSearch = req.body.searchData
-
-  console.log(movieSearch)
 
   // queries
   db.movies.findAll({
@@ -32,6 +42,7 @@ app.post('/send/data', function (req, res, nextFn) {
 
 // adds data to join table
 app.post('/saveto/watchlist', function (req, res, nextFn) {
+  //TODO: get userID coded here
   const userID = 2
 
   // users presses add button on html card and it renders to users database
@@ -94,10 +105,13 @@ app.delete('/removefrom/watchlist', function (req, res, nextFn) {
 /// /////////////////////// oAuth ///////////////////////////
 // express set up from article
 app.get('/', function (req, res) {
+  // console.log(req.session.token, 'MY TOKEN')
+
   res.sendFile('index.html', {
     root: __dirname + '/public'
   })
 })
+
 
 app.listen(3500, function () {
   console.log('server is listening on port 3500...')
@@ -136,8 +150,8 @@ passport.use(new FacebookStrategy({
   callbackURL: '/auth/facebook/callback'
 },
 function (accessToken, refreshToken, profile, cb) {
-  console.log(profile)
-  console.log('---------------')
+  // console.log(profile)
+  // console.log('---------------')
 
   let nameArray = profile.displayName.split(' ')
   let fname = nameArray[0]
@@ -152,7 +166,7 @@ function (accessToken, refreshToken, profile, cb) {
     }
   })
     .then(function (result) {
-      console.log(result)
+      // console.log(result)
     })
     .catch(function (error) {
       console.log(error)
@@ -184,13 +198,18 @@ passport.use(new GoogleStrategy({
   passReqToCallback: true
 },
 function (request, accessToken, refreshToken, profile, done) {
-  console.log(request.body)
-  console.log('return value from Google:', profile)
-  console.log('--------------------------')
+  // console.log(request.body)
+  // console.log('return value from Google:', profile)
+  // console.log('--------------------------')
 
   let nameArray = profile.displayName.split(' ')
   let firstName = nameArray[0]
   let lastName = nameArray[1]
+
+  // console.log(request.user , 'THIS IS REQUEST USER!!!!!!!!!!!!!!')
+
+  // request.session.fname = firstName
+  // request.session.lname = lastName
 
   db.users.findOrCreate({
     where: {
@@ -200,10 +219,10 @@ function (request, accessToken, refreshToken, profile, done) {
       username: 'Null',
       googleId: profile.id
     }
-    // return done(err, user)
   })
     .then(function (result) {
-    // console.log(result)
+    // console.log('THIS IS MY RESULT... ',result)
+
       return done(null, result)
     })
     .catch(function (error) {
@@ -220,12 +239,28 @@ app.get('/auth/google',
 app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   function (req, res) {
+
+    // console.log('req.user', req.user);
+    // req.session.token = req.user.token
+    // console.log(req.session.token)
+    //accessing session data
+    // res.send(req.session.fname + ' ' + req.session.lname)
+    
     res.redirect('/')
   })
 
-// logout logic
-// app.get('/logout', function(res, req, nextFn) {
-//     req.logout()
-//     //redirect to homepage
-//     res.redirect('/')
-// })
+  app.get('/user', function(req, res, nextFn) {
+    if (req.user) {
+      res.json({
+        user: req.user
+      })
+    } else {
+      res.redirect('/auth/google')
+    }
+  }) 
+
+  // write app.get('/get/user')
+  // check for req.user
+  // if it's there res.json({user: req.user});
+
+
