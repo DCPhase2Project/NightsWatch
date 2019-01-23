@@ -11,11 +11,12 @@ function getMovieFromDB () {
     type: 'POST',
     url: '/send/data',
     data: {
-      searchData: userSearch.toLowerCase().indexOf(userSearch.toLowerCase())>=0
+      searchData: userSearch
     }
   })
     .then(function (result) {
       console.log(result)
+    //   console.log(result.map(makeMovie).join(''))
       movieHTML = result.map(makeMovie).join('')
       if (document.getElementById('resultsContainer').innerHTML === null) {
         $(movieHTML).appendTo('#resultsContainer')
@@ -67,30 +68,20 @@ window.onload = function() {
         url: '/user',
     })
     .then(function (result) {
-        console.log(result, 'First Name')
-        userNameHTML = result.map().join('')
-        if (document.getElementById('userName').innerHTML === null) {
-            $(userNameHTML).appendTo('#userName')
+        let userName = result.user[0].fname + ' ' + result.user[0].lname
+        console.log(userName)
+        // userNameHTML = result.map(userName).join('')
+        if (document.getElementById('userName').innerHTML === '') {
+            document.getElementById('userName').innerHTML = `Hello ${userName}!`
         } else {
             document.getElementById('userName').innerHTML = null 
-            $(userNameHTML).appendTo('#userName')
+            document.getElementById('userName').innerHTML = 'Please Log In'
         }
     })
     .catch(function (error) {
         console.log(error)
     })
 }
-
-function makeMovie (currentMovie) {
-  return `<div class="card" style="width: 20rem; background: darkgray; margin: 10px;">
-            <div class="card-body d-flex" style="flex-direction: column; align-items: center;">
-              <h5 class="card-title d-flex">${currentMovie.title}</h5>
-              <h5 class="card-text d-flex" style="margin-bottom: .75rem;">${currentMovie.genre}</h5>
-              <a href="#" id="add-button" class="btn btn-primary d-flex" onclick=saveToWatchlist(${currentMovie.id})>Add to your watchlist</a>
-            </div>
-            </div>`
-}
-
 
 function init () {
   console.log('the search bar is case sensitive')
