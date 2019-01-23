@@ -24,8 +24,6 @@ app.use(session({
 app.post('/send/data', function (req, res, nextFn) {
   let movieSearch = req.body.searchData
 
-  // console.log(movieSearch)
-
   // queries
   db.movies.findAll({
     where: {
@@ -107,23 +105,11 @@ app.delete('/removefrom/watchlist', function (req, res, nextFn) {
 /// /////////////////////// oAuth ///////////////////////////
 // express set up from article
 app.get('/', function (req, res) {
-  console.log(req.session.token, 'MY TOKEN')
+  // console.log(req.session.token, 'MY TOKEN')
 
   res.sendFile('index.html', {
     root: __dirname + '/public'
   })
-//   if (req.session.token) {
-//     console.log(req.session.token)
-//     res.cookie('token', req.session.token);
-//     res.json({
-//         status: 'session cookie set'
-//     });
-// } else {
-//     res.cookie('token', '')
-//     res.json({
-//         status: 'session cookie not set'
-//     });
-// }
 })
 
 
@@ -164,8 +150,8 @@ passport.use(new FacebookStrategy({
   callbackURL: '/auth/facebook/callback'
 },
 function (accessToken, refreshToken, profile, cb) {
-  console.log(profile)
-  console.log('---------------')
+  // console.log(profile)
+  // console.log('---------------')
 
   let nameArray = profile.displayName.split(' ')
   let fname = nameArray[0]
@@ -180,7 +166,7 @@ function (accessToken, refreshToken, profile, cb) {
     }
   })
     .then(function (result) {
-      console.log(result)
+      // console.log(result)
     })
     .catch(function (error) {
       console.log(error)
@@ -220,8 +206,10 @@ function (request, accessToken, refreshToken, profile, done) {
   let firstName = nameArray[0]
   let lastName = nameArray[1]
 
-  request.session.fname = firstName
-  request.session.lname = lastName
+  // console.log(request.user , 'THIS IS REQUEST USER!!!!!!!!!!!!!!')
+
+  // request.session.fname = firstName
+  // request.session.lname = lastName
 
   db.users.findOrCreate({
     where: {
@@ -233,7 +221,7 @@ function (request, accessToken, refreshToken, profile, done) {
     }
   })
     .then(function (result) {
-    console.log('THIS IS MY RESULT... ',result)
+    // console.log('THIS IS MY RESULT... ',result)
 
       return done(null, result)
     })
@@ -251,39 +239,28 @@ app.get('/auth/google',
 app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   function (req, res) {
+
+    // console.log('req.user', req.user);
+    // req.session.token = req.user.token
+    // console.log(req.session.token)
     //accessing session data
     // res.send(req.session.fname + ' ' + req.session.lname)
-    // req.session.token = req.user.token
-    console.log(req.session.token)
+    
     res.redirect('/')
   })
 
+  app.get('/user', function(req, res, nextFn) {
+    if (req.user) {
+      res.json({
+        user: req.user
+      })
+    } else {
+      res.redirect('/auth/google')
+    }
+  }) 
 
-  // app.post('send/userData', function(res, req, nextFn){
-  //   res.send(req.session.fname + ' ' + req.session.lname)
-  // })
+  // write app.get('/get/user')
+  // check for req.user
+  // if it's there res.json({user: req.user});
 
-  
-  // app.post('/watchlist', function (req, res, nextFn) {
-  //   // Placeholder for Session ID
-  //   db.users.findAll({
-  //     where: {
-  //       id: req.body.searchData
-  //     },
-  //     include: [{
-  //       model: db.movies,
-  //       through: {
-  //         attributes: [db.movies.id]
-  //       }
-  //     }]
-  //   })
-  //     .then(function (results) {
-  //       const data = results.map(function (result) {
-  //         return result.dataValues
-  //       })
-  //       res.send(data)
-  //     })
-  //     .catch(function (error) {
-  //       console.log(error)
-  //     })
-  // })
+

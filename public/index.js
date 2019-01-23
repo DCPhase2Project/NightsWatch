@@ -60,22 +60,36 @@ function saveToWatchlist (id) {
 }
 
 
-// $.ajax({
-//     type: 'POST',
-//     url: '/',
-//     data: {
-//       userData: userName 
-//     }
-//   })// ajax
-//     .then(function (result) {
-//       console.log(result)
-//     })
-//     .catch(function (error) {
-//       console.log(error)
-//     })
-    
+// On page load, call '/get/user'
+window.onload = function() {
+    $.ajax({
+        type: 'GET',
+        url: '/user',
+    })
+    .then(function (result) {
+        console.log(result, 'First Name')
+        userNameHTML = result.map().join('')
+        if (document.getElementById('userName').innerHTML === null) {
+            $(userNameHTML).appendTo('#userName')
+        } else {
+            document.getElementById('userName').innerHTML = null 
+            $(userNameHTML).appendTo('#userName')
+        }
+    })
+    .catch(function (error) {
+        console.log(error)
+    })
+}
 
-  
+function makeMovie (currentMovie) {
+  return `<div class="card" style="width: 20rem; background: darkgray; margin: 10px;">
+            <div class="card-body d-flex" style="flex-direction: column; align-items: center;">
+              <h5 class="card-title d-flex">${currentMovie.title}</h5>
+              <h5 class="card-text d-flex" style="margin-bottom: .75rem;">${currentMovie.genre}</h5>
+              <a href="#" id="add-button" class="btn btn-primary d-flex" onclick=saveToWatchlist(${currentMovie.id})>Add to your watchlist</a>
+            </div>
+            </div>`
+}
 
 
 function init () {
