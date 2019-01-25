@@ -15,7 +15,6 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(__dirname + '/public'))
 
-//Session Middleware
 app.use(session({
   secret: 'keyboard cat'
 }))
@@ -66,12 +65,11 @@ app.post('/send/data', function (req, res, nextFn) {
     })
 })// post function
 
-// adds data to join table
+
 app.post('/saveto/watchlist', function (req, res, nextFn) {
   console.log(req.user.id, 'Req.user.id!!!!!!!!!!!!!!!!!!')
   const userID = req.user.id
 
-  // users presses add button on html card and it renders to users database
   db.movie_users.create({
     user_id: userID,
     movie_id: req.body.searchData
