@@ -19,6 +19,32 @@ app.use(express.static(__dirname + '/public'))
 app.use(session({
   secret: 'keyboard cat'
 }))
+// passport setup
+const passport = require('passport')
+app.use(passport.initialize())
+app.use(passport.session())
+
+
+passport.serializeUser(function (user, cb) {
+  cb(null, user.id)
+})
+
+passport.deserializeUser(function (userID, cb) {
+  
+  db.users.findAll({
+    where: {
+      id: userID
+    }
+  })
+  .then(function(user) {
+    console.log('Deseriazle User', user)
+    cb(null, user[0].dataValues)
+  })
+  .catch (function (error){
+    console.log(error)
+  })
+  
+})
 
 
 app.post('/send/data', function (req, res, nextFn) {
@@ -43,7 +69,8 @@ app.post('/send/data', function (req, res, nextFn) {
 // adds data to join table
 app.post('/saveto/watchlist', function (req, res, nextFn) {
   //TODO: get userID coded here
-  const userID = 2
+  console.log(req.user.id, 'Req.user.id!!!!!!!!!!!!!!!!!!')
+  const userID = req.user.id
 
   // users presses add button on html card and it renders to users database
   db.movie_users.create({
@@ -117,10 +144,7 @@ app.listen(3500, function () {
   console.log('server is listening on port 3500...')
 })
 
-// passport setup
-const passport = require('passport')
-app.use(passport.initialize())
-app.use(passport.session())
+
 
 app.get('/success', function (req, res) {
   res.send('You have successfully logged in')
@@ -128,19 +152,6 @@ app.get('/success', function (req, res) {
 
 app.get('/error', function (res, req) {
   res.send('error logging in...')
-})
-
-passport.serializeUser(function (userID, cb) {
-  cb(null, userID)
-})
-
-passport.deserializeUser(function (obj, cb) {
-  db.users.findAll({
-    where: {
-      userID: req.user.id,
-    }
-  })
-  cb(null, obj)
 })
 
 
@@ -172,9 +183,9 @@ function (request, accessToken, refreshToken, profile, done) {
     }
   })
     .then(function (result) {
-    // console.log('THIS IS MY RESULT... ',result)
+     console.log('THIS IS MY RESULT... ',result[0].dataValues)
 
-      return done(null, result)
+      return done(null, result[0].dataValues)
     })
     .catch(function (error) {
       console.log(error)
@@ -195,7 +206,7 @@ app.get('/auth/google/callback',
   })
 
   app.get('/user', function(req, res, nextFn) {
-    let userSession = req.user
+
     if (req.user) {
       res.json({
         user: req.user
