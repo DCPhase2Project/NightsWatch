@@ -15,35 +15,10 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(__dirname + '/public'))
 
+//Session Middleware
 app.use(session({
   secret: 'keyboard cat'
 }))
-// passport setup
-const passport = require('passport')
-app.use(passport.initialize())
-app.use(passport.session())
-
-
-passport.serializeUser(function (user, cb) {
-  cb(null, user.id)
-})
-
-passport.deserializeUser(function (userID, cb) {
-  
-  db.users.findAll({
-    where: {
-      id: userID
-    }
-  })
-  .then(function(user) {
-    console.log('Deseriazle User', user)
-    cb(null, user[0].dataValues)
-  })
-  .catch (function (error){
-    console.log(error)
-  })
-  
-})
 
 
 app.post('/send/data', function (req, res, nextFn) {
@@ -66,11 +41,12 @@ app.post('/send/data', function (req, res, nextFn) {
     })
 })// post function
 
-
+// adds data to join table
 app.post('/saveto/watchlist', function (req, res, nextFn) {
-  console.log(req.user.id, 'Req.user.id!!!!!!!!!!!!!!!!!!')
-  const userID = req.user.id
+  //TODO: get userID coded here
+  const userID = 2
 
+  // users presses add button on html card and it renders to users database
   db.movie_users.create({
     user_id: userID,
     movie_id: req.body.searchData
@@ -109,8 +85,10 @@ app.post('/watchlist', function (req, res, nextFn) {
     })
 })
 
+// remove data from join table
 app.delete('/removefrom/watchlist', function (req, res, nextFn) {
 
+  // users presses add button on html card and it renders to users database
   db.movie_users.destroy({
     where: {
       movie_id: req.body.movieId,
@@ -140,7 +118,10 @@ app.listen(3500, function () {
   console.log('server is listening on port 3500...')
 })
 
-
+// passport setup
+const passport = require('passport')
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.get('/success', function (req, res) {
   res.send('You have successfully logged in')
@@ -150,7 +131,13 @@ app.get('/error', function (res, req) {
   res.send('error logging in...')
 })
 
+passport.serializeUser(function (user, cb) {
+  cb(null, user)
+})
 
+passport.deserializeUser(function (obj, cb) {
+  cb(null, obj)
+})
 
 // Google Login
 const GOOGLE_CILENT_ID = '535967090840-dvh8ns1q1avbnbs8mkafhn1bfrup17n2.apps.googleusercontent.com'
@@ -165,10 +152,18 @@ passport.use(new GoogleStrategy({
   passReqToCallback: true
 },
 function (request, accessToken, refreshToken, profile, done) {
+  // console.log(request.body)
+  // console.log('return value from Google:', profile)
+  // console.log('--------------------------')
 
   let nameArray = profile.displayName.split(' ')
   let firstName = nameArray[0]
   let lastName = nameArray[1]
+
+  // console.log(request.user , 'THIS IS REQUEST USER!!!!!!!!!!!!!!')
+
+  // request.session.fname = firstName
+  // request.session.lname = lastName
 
   db.users.findOrCreate({
     where: {
@@ -180,9 +175,9 @@ function (request, accessToken, refreshToken, profile, done) {
     }
   })
     .then(function (result) {
-     console.log('THIS IS MY RESULT... ',result[0].dataValues)
+    // console.log('THIS IS MY RESULT... ',result)
 
-      return done(null, result[0].dataValues)
+      return done(null, result)
     })
     .catch(function (error) {
       console.log(error)
@@ -198,6 +193,13 @@ app.get('/auth/google',
 app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   function (req, res) {
+
+    // console.log('req.user', req.user);
+    // req.session.token = req.user.token
+    // console.log(req.session.token)
+    //accessing session data
+    // res.send(req.session.fname + ' ' + req.session.lname)
+    
     res.redirect('/')
   })
 
@@ -212,12 +214,18 @@ app.get('/auth/google/callback',
   }) 
 
 
-
 app.get('/logout', function(req, res, nextFn) {
   req.logOut()
   res.redirect('/')
 })
 
+// app.get('/checkLogIn', function(req, res, nextFn) {
+//   //checking if user is logged in
+//   if (req.user) {
+//     //user is logged in
+//     return true
+//   } else {
+//     return false
+//   }
+// })
 
-
-  
