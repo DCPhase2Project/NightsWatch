@@ -28,7 +28,8 @@ app.post('/send/data', function (req, res, nextFn) {
   db.movies.findAll({
     where: {
       title: {
-        [Op.like]: '%' + movieSearch + '%'
+        [Op.iLike]: '%' + movieSearch + '%'
+        
       }
     }
   })
