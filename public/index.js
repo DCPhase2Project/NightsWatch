@@ -63,6 +63,8 @@ function saveToWatchlist (id) {
 
 // On page load, call '/get/user'
 window.onload = function() {
+    document.getElementById('logOutButton').style.visibility = 'hidden'
+
     $.ajax({
         type: 'GET',
         url: '/user',
@@ -73,15 +75,33 @@ window.onload = function() {
         // userNameHTML = result.map(userName).join('')
         if (document.getElementById('userName').innerHTML === '') {
             document.getElementById('userName').innerHTML = `Hello ${userName}!`
+            document.getElementById('logOutButton').style.visibility = 'visible'
+            document.getElementById('googleAuth').style.visibility = 'hidden'
         } else {
             document.getElementById('userName').innerHTML = null 
             document.getElementById('userName').innerHTML = 'Please Log In'
+            document.getElementById('logOutButton').style.visibility = 'hidden'
+            document.getElementById('googleAuth').style.visibility = 'visible'
         }
     })
     .catch(function (error) {
         console.log(error)
     })
 }
+
+document.getElementById('logOutButton').addEventListener('click', function() {
+    $.ajax({
+        type: 'GET',
+        url: '/logout'
+    })
+    .then( function (result) {
+        // console.log('result from /logout...', result)
+        document.getElementById('userName').innerHTML = 'User Has Logged Out'
+        document.getElementById('logOutButton').style.visibility = 'hidden'
+        document.getElementById('googleAuth').style.visibility = 'visible'
+
+    })
+})
 
 function init () {
   console.log('the search bar is case sensitive')

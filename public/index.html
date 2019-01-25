@@ -23,14 +23,8 @@
 					  <span class="navbar-toggler-icon"></span>
 					</button>
 					<div class="collapse navbar-collapse" id="navbarNav">
-						<!-- <button type="button" class="btn btn-primary">Primary</button>
-						<button type="button" class="btn btn-primary">Primary</button> -->
-						<a href=auth/facebook>Sign in with Facebook</a>
-						<br></br>
-						<!-- <div id="googleSignInButton" class="g-signin2" data-onsuccess="onSignIn"></div> -->
-						<a href=auth/google>Sign in with Google</a>
-						<br></br>
-						<button id="logOutButton" type="button" class="btn btn-primary">Log Out</button>
+						<a id="googleAuth" href=auth/google>Sign in with Google</a>
+						<button  id="logOutButton" type="button" class="btn btn-primary">Log Out</button>
 					</div>
 				  </nav>
 		<div class="row">
@@ -44,7 +38,7 @@
 			<div class="col-12 search">
 				<form id="search-form">
 					<div class="input-group input-group-lg">
-						<input class="form-control" id="search-bar" placeholder="Search for a movie...(case sensitive)">	
+						<input class="form-control" id="search-bar" placeholder="Search for a movie...(case insensitive)">	
 						<button id="submit-button" class="btn btn-primary input-group-btn" type="button">Search</button>
 				</form>
 			</div>

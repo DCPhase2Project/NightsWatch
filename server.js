@@ -53,7 +53,8 @@ app.post('/send/data', function (req, res, nextFn) {
   db.movies.findAll({
     where: {
       title: {
-        [Op.like]: '%' + movieSearch + '%'
+        [Op.iLike]: '%' + movieSearch + '%'
+        
       }
     }
   })
@@ -150,6 +151,7 @@ app.get('/error', function (res, req) {
 })
 
 
+
 // Google Login
 const GOOGLE_CILENT_ID = '535967090840-dvh8ns1q1avbnbs8mkafhn1bfrup17n2.apps.googleusercontent.com'
 const GOOGLE_CILENT_SERECT = 'FJFAwRoq6om2yisN-G2KiHTz'
@@ -202,12 +204,20 @@ app.get('/auth/google/callback',
   app.get('/user', function(req, res, nextFn) {
     if (req.user) {
       res.json({
-        user: req.user
+        user: req.user,
       })
     } else {
       res.redirect('/')
     }
   }) 
+
+
+
+app.get('/logout', function(req, res, nextFn) {
+  req.logOut()
+  res.redirect('/')
+})
+
 
 
   
