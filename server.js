@@ -68,7 +68,6 @@ app.post('/send/data', function (req, res, nextFn) {
 
 // adds data to join table
 app.post('/saveto/watchlist', function (req, res, nextFn) {
-  //TODO: get userID coded here
   console.log(req.user.id, 'Req.user.id!!!!!!!!!!!!!!!!!!')
   const userID = req.user.id
 
@@ -201,17 +200,15 @@ app.get('/auth/google',
 app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   function (req, res) {
-   
     res.redirect('/')
   })
 
   app.get('/user', function(req, res, nextFn) {
-
     if (req.user) {
       res.json({
         user: req.user
       })
     } else {
-      res.redirect('/auth/google')
+      res.redirect('/')
     }
   }) 
