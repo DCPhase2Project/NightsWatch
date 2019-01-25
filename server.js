@@ -110,10 +110,8 @@ app.post('/watchlist', function (req, res, nextFn) {
     })
 })
 
-// remove data from join table
 app.delete('/removefrom/watchlist', function (req, res, nextFn) {
 
-  // users presses add button on html card and it renders to users database
   db.movie_users.destroy({
     where: {
       movie_id: req.body.movieId,
