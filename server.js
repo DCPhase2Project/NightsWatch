@@ -130,60 +130,19 @@ app.get('/error', function (res, req) {
   res.send('error logging in...')
 })
 
-passport.serializeUser(function (user, cb) {
-  cb(null, user)
+passport.serializeUser(function (userID, cb) {
+  cb(null, userID)
 })
 
 passport.deserializeUser(function (obj, cb) {
+  db.users.findAll({
+    where: {
+      userID: req.user.id,
+    }
+  })
   cb(null, obj)
 })
 
-// Facebook Auth
-const FacebookStrategy = require('passport-facebook').Strategy
-
-const FACEBOOK_APP_ID = '1218609321635653'
-const FACEBOOK_APP_SERECT = 'afebe77a15b07c78ad8584a5b6e8e86f'
-
-passport.use(new FacebookStrategy({
-  clientID: FACEBOOK_APP_ID,
-  clientSecret: FACEBOOK_APP_SERECT,
-  callbackURL: '/auth/facebook/callback'
-},
-function (accessToken, refreshToken, profile, cb) {
-  // console.log(profile)
-  // console.log('---------------')
-
-  let nameArray = profile.displayName.split(' ')
-  let fname = nameArray[0]
-  let lname = nameArray[1]
-
-  db.users.findOrCreate({
-    where: {
-      fname: fname,
-      lname: lname,
-      email: 'Null',
-      username: 'Null'
-    }
-  })
-    .then(function (result) {
-      // console.log(result)
-    })
-    .catch(function (error) {
-      console.log(error)
-    })
-
-  return cb(null, profile)
-}
-))
-
-app.get('/auth/facebook',
-  passport.authenticate('facebook'))
-
-app.get('/auth/facebook/callback',
-  passport.authenticate('facebook', { failureRedirect: '/error' }),
-  function (req, res) {
-    res.redirect('/success')
-  })
 
 // Google Login
 const GOOGLE_CILENT_ID = '535967090840-dvh8ns1q1avbnbs8mkafhn1bfrup17n2.apps.googleusercontent.com'
@@ -198,18 +157,10 @@ passport.use(new GoogleStrategy({
   passReqToCallback: true
 },
 function (request, accessToken, refreshToken, profile, done) {
-  // console.log(request.body)
-  // console.log('return value from Google:', profile)
-  // console.log('--------------------------')
 
   let nameArray = profile.displayName.split(' ')
   let firstName = nameArray[0]
   let lastName = nameArray[1]
-
-  // console.log(request.user , 'THIS IS REQUEST USER!!!!!!!!!!!!!!')
-
-  // request.session.fname = firstName
-  // request.session.lname = lastName
 
   db.users.findOrCreate({
     where: {
@@ -239,17 +190,12 @@ app.get('/auth/google',
 app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   function (req, res) {
-
-    // console.log('req.user', req.user);
-    // req.session.token = req.user.token
-    // console.log(req.session.token)
-    //accessing session data
-    // res.send(req.session.fname + ' ' + req.session.lname)
-    
+   
     res.redirect('/')
   })
 
   app.get('/user', function(req, res, nextFn) {
+    let userSession = req.user
     if (req.user) {
       res.json({
         user: req.user
@@ -258,9 +204,3 @@ app.get('/auth/google/callback',
       res.redirect('/auth/google')
     }
   }) 
-
-  // write app.get('/get/user')
-  // check for req.user
-  // if it's there res.json({user: req.user});
-
-
